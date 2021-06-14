@@ -1,21 +1,21 @@
 #include "hcu_queue.h"
 
-static void create_node(ll_node_t *node_ptr, int data_size) {
-    node_ptr = (ll_node_t *) malloc(1* (sizeof(ll_node_t) + data_size));
-}
-
-hcu_queue_t* init_queue(int queue_size) {
+hcu_queue_t* init_queue(int queue_size) 
+{
     hcu_queue_t *queue_p = (hcu_queue_t*) calloc(1,sizeof(hcu_queue_t));
     queue_p->queue_size = queue_size;
     queue_p->rem_queue_size = queue_size;
     return queue_p;
 }
 
-void insert_to_hcu_queue(char *data, int data_size, hcu_queue_t *queue_p) {
+void insert_to_hcu_queue(char *data, int data_size, hcu_queue_t *queue_p) 
+{
     /* This is the hardware FIFO queue, data_size <= rem_queue_size */
     ll_node_t *node_p;
-    create_node(node_p, data_size);
+    node_p = (ll_node_t *) calloc(1, (sizeof(ll_node_t) + data_size));
+
     pthread_mutex_init(&node_p->lock, NULL);
+
     if(queue_p->head == NULL) {
         queue_p->head = node_p;
         memcpy(node_p->data, data, data_size);
@@ -31,7 +31,8 @@ void insert_to_hcu_queue(char *data, int data_size, hcu_queue_t *queue_p) {
             printf(" Acquired lock to add to hcu_queue\n");
             memcpy(node_p->data, data, data_size);
             node_p->next = queue_p->head;
+            queue_p->head = node_p;
         }
     } while(lock_ret);
-    lock_ret = pthread_mutex_unlock(&queue_p->head->lock);
+    lock_ret = pthread_mutex_unlock(&queue_p->head->next->lock);
 }

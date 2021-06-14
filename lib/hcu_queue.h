@@ -5,15 +5,15 @@
 #include <stdio.h>
 
 typedef struct ll_node_ {
-	struct ll_node_ *next;
+    struct ll_node_ *next;
     pthread_mutex_t lock;
     int data_size;
     char data[0];
 } ll_node_t;
 
 typedef struct hcu_queue_ {
-	ll_node_t *head;
-	uint16_t queue_size;
+    ll_node_t *head;
+    uint16_t queue_size;
     uint16_t rem_queue_size;
 } hcu_queue_t;
 
