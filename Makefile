@@ -14,5 +14,5 @@ hash_test:$(INC)
 	 $(CC) $(LDFLAGS) -o hcu_hash_test src/hcu_hash.o src/hcu_hash_test.o $(LDLIBS)
 
 clean:
-	rm -r hcu*
+	rm -rf hcu*
 	rm -rf src/*.o	
